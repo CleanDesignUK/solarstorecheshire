@@ -1,82 +1,92 @@
-// Solar Store Cheshire landing page JavaScript
-// Handles form validation, submission to Web3Forms and simple UI interactions.
-
 document.addEventListener('DOMContentLoaded', () => {
-  // Set the current year in the footer
-  const yearSpan = document.getElementById('year');
-  if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear().toString();
-  }
+  loadPartial('navbar-placeholder', 'component/navbar.html');
+  loadPartial('footer-placeholder', 'component/footer.html');
+  initSmoothAnchors();
+  initFormValidation();
+});
 
-  const form = document.getElementById('leadForm');
-  const formMessage = document.getElementById('formMessage');
+function loadPartial(targetId, file) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
 
-  // Simple regex patterns
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  // Matches four or more repeated digits (e.g. 1111, 0000 etc.)
-  const repeatedDigitsPattern = /(\d)\1{3,}/;
+  fetch(file)
+    .then(response => response.text())
+    .then(html => {
+      target.innerHTML = html;
+      setActiveNav();
+    })
+    .catch(() => {
+      target.innerHTML = '';
+    });
+}
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    formMessage.textContent = '';
-
-    // Read values
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
-    const phone = form.phone.value.trim();
-    const propertyType = form.property_type.value;
-    const interest = form.querySelector('input[name="interest"]:checked');
-
-    // Basic validation
-    if (!name) {
-      formMessage.textContent = 'Please enter your name.';
-      return;
-    }
-    if (!emailPattern.test(email)) {
-      formMessage.textContent = 'Please enter a valid email address.';
-      return;
-    }
-    // Phone should be at least 6 characters and contain only digits, spaces or plus
-    const phoneSanitised = phone.replace(/[\s+]/g, '');
-    if (!/^[0-9]{6,15}$/.test(phoneSanitised)) {
-      formMessage.textContent = 'Please enter a valid phone number (digits only).';
-      return;
-    }
-    if (repeatedDigitsPattern.test(phoneSanitised)) {
-      formMessage.textContent = 'Phone number cannot contain more than 3 repeated digits in a row.';
-      return;
-    }
-    if (!propertyType) {
-      formMessage.textContent = 'Please select a property type.';
-      return;
-    }
-    if (!interest) {
-      formMessage.textContent = 'Please choose what you’re interested in.';
-      return;
-    }
-
-    // Prepare data for Web3Forms
-    const formData = new FormData(form);
-    // Add custom fields if necessary
-    formData.set('interest', interest.value);
-
-    formMessage.textContent = 'Submitting…';
-
-    try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-      const data = await response.json();
-      if (data.success) {
-        formMessage.textContent = 'Thank you! Your request has been received.';
-        form.reset();
-      } else {
-        formMessage.textContent = data.message || 'Something went wrong. Please try again later.';
-      }
-    } catch (error) {
-      formMessage.textContent = 'There was an error submitting the form. Please try again later.';
+function setActiveNav() {
+  document.querySelectorAll('.premium-navbar .nav-link').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href === '#top') {
+      link.classList.add('active');
     }
   });
-});
+}
+
+function initSmoothAnchors() {
+  document.addEventListener('click', event => {
+    const anchor = event.target.closest('a[href^="#"]');
+    if (!anchor) return;
+
+    const targetId = anchor.getAttribute('href');
+    if (!targetId || targetId === '#') return;
+
+    const section = document.querySelector(targetId);
+    if (!section) return;
+
+    event.preventDefault();
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+function initFormValidation() {
+  const form = document.getElementById('solarLeadForm');
+  const errorBox = document.getElementById('formError');
+  if (!form || !errorBox) return;
+
+  form.addEventListener('submit', event => {
+    errorBox.classList.add('d-none');
+    errorBox.textContent = '';
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const propertyType = document.getElementById('propertyType').value;
+    const interest = document.getElementById('interest').value;
+
+    const errors = [];
+
+    if (name.length < 2) errors.push('Please enter your full name.');
+    if (!isValidEmail(email)) errors.push('Please enter a valid email address.');
+    if (!isValidUKPhone(phone)) errors.push('Please enter a valid phone number.');
+    if (hasExcessiveRepeatedDigits(phone)) errors.push('Please enter a real phone number without repeated digits.');
+    if (!propertyType) errors.push('Please select a property type.');
+    if (!interest) errors.push('Please select your interest.');
+
+    if (errors.length > 0) {
+      event.preventDefault();
+      errorBox.innerHTML = errors.join('<br>');
+      errorBox.classList.remove('d-none');
+    }
+  });
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(email);
+}
+
+function isValidUKPhone(phone) {
+  const cleaned = phone.replace(/[\s()+-]/g, '');
+  return /^(?:0|44|\+44)?7\d{9}$|^(?:0|44|\+44)?[1-9]\d{8,10}$/.test(cleaned);
+}
+
+function hasExcessiveRepeatedDigits(value) {
+  const digits = value.replace(/\D/g, '');
+  return /(\d)\1{4,}/.test(digits);
+}
