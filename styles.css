@@ -3141,3 +3141,97 @@ textarea.form-control,
     flex-shrink: 0;
   }
 }
+
+/* =========================
+   MOBILE HORIZONTAL SCROLL FIX
+========================= */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+}
+
+main,
+section,
+.site-footer,
+#navbar-placeholder,
+.nav-glass-shell,
+.form-card,
+.final-form-card {
+  max-width: 100%;
+}
+
+.container,
+.row,
+[class^="col-"],
+[class*=" col-"] {
+  min-width: 0;
+}
+
+.form-control,
+.form-select,
+textarea.form-control {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.eyebrow,
+.hero-area-line,
+.hero-mcs-tag,
+.btn,
+.local-areas-tags a,
+.footer-contact-list a {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.eyebrow::before {
+  flex: 0 0 34px;
+}
+
+@media (max-width: 767.98px) {
+  .hero-area-line,
+  .hero-mcs-tag {
+    width: 100%;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+
+  .final-form-card,
+  .form-card {
+    overflow: hidden;
+  }
+
+  .solutions-grid,
+  .property-mini-grid,
+  .benefit-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    scroll-snap-type: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .solution-card,
+  .property-mini-card,
+  .benefit-card {
+    flex: initial !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    scroll-snap-align: none !important;
+  }
+
+  .mobile-swipe-controls {
+    display: none !important;
+  }
+}
