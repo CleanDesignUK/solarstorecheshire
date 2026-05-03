@@ -4,7 +4,7 @@ const navbarFallback = `
     <div class="nav-glass-shell">
       <a class="navbar-brand brand-wrap" href="index.html#top" aria-label="Solar Store Cheshire home">
         <img 
-          src="images/solar-store-cheshire-trans-logo-150.png" 
+          src="images/solar-store-cheshire-logo-icon-400.jpg" 
           alt="Solar Store Cheshire logo" 
           class="brand-logo"
         >
@@ -70,7 +70,7 @@ const footerFallback = `
         <div class="footer-brand-col">
           <a href="index.html#top" class="footer-logo-wrap" aria-label="Solar Store Cheshire homepage">
             <img 
-              src="images/solar-store-cheshire-trans-logo-400.png" 
+              src="images/solar-store-cheshire-logo-icon-400.jpg"
               alt="Solar Store Cheshire logo" 
               class="footer-logo"
             >

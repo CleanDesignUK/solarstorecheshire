@@ -3235,3 +3235,13 @@ textarea.form-control {
     display: none !important;
   }
 }
+
+.brand-logo,
+.footer-logo {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
