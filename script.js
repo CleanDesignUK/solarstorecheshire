@@ -31,7 +31,7 @@ const navbarFallback = `
 
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav mx-auto align-items-xl-center">
-          <li class="nav-item"><a class="nav-link" href="index.html#why-cheshire">Why Cheshire</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#why-cheshire">Why Solar</a></li>
           <li class="nav-item"><a class="nav-link" href="index.html#solutions">Solutions</a></li>
           <li class="nav-item"><a class="nav-link" href="index.html#property-types">Properties</a></li>
           <li class="nav-item"><a class="nav-link" href="index.html#real-results">Results</a></li>
